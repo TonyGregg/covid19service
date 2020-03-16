@@ -26,6 +26,7 @@ public class Covid19Controller {
     CoronavirusService coronavirusService;
     @RequestMapping("/confirmed")
     public VirusDashBoard getAllConfirmedCases() {
+        log.info("Getting confirmed cases across the globe");
         List<VirusStatDataHolder> virusData = coronavirusService.getConfirmedCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData);
         return virusDashBoard;
@@ -33,6 +34,8 @@ public class Covid19Controller {
 
     @RequestMapping("/recovered")
     public VirusDashBoard getAllRecovered() {
+        log.info("Getting recovered cases across the globe");
+
         List<VirusStatDataHolder> virusData = coronavirusService.getRecoveredCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData);
         return virusDashBoard;
@@ -40,6 +43,8 @@ public class Covid19Controller {
 
     @RequestMapping("/death")
     public VirusDashBoard getAllDeath() {
+        log.info("Getting recovered cases across the globe");
+
         List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData);
         return virusDashBoard;
@@ -76,6 +81,7 @@ public class Covid19Controller {
 
     @RequestMapping("/confirmed/{country}")
     public VirusDashBoard getConfirmedCountry(@PathVariable("country") @NotNull @NotEmpty String country) {
+        log.info("Getting confirmed cases across  for country : "+country);
         List<VirusStatDataHolder> virusData = coronavirusService.getConfirmedCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country);
         updateLastRecordFetchDate(virusDashBoard);
@@ -84,6 +90,8 @@ public class Covid19Controller {
     @RequestMapping("/confirmed/{country}/{state}")
     public VirusDashBoard getConfirmedCountryState(@PathVariable("country") @NotNull @NotEmpty String country,
                                                    @PathVariable("state") @NotNull @NotEmpty String state) {
+        log.info("Getting confirmed cases across  for country : "+country + " and state : "+state);
+
         List<VirusStatDataHolder> virusData = coronavirusService.getConfirmedCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country, state);
         updateLastRecordFetchDate(virusDashBoard);
@@ -92,6 +100,8 @@ public class Covid19Controller {
 
     @RequestMapping("/recovered/{country}")
     public VirusDashBoard getRecoveredCountry(@PathVariable("country") @NotNull @NotEmpty String country) {
+        log.info("Getting recovered cases across  for country : "+country);
+
         List<VirusStatDataHolder> virusData = coronavirusService.getRecoveredCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country);
         updateLastRecordFetchDate(virusDashBoard);
@@ -100,6 +110,8 @@ public class Covid19Controller {
     @RequestMapping("/recovered/{country}/{state}")
     public VirusDashBoard getRecoveredCountryState(@PathVariable("country") @NotNull @NotEmpty String country,
                                                    @PathVariable("state") @NotNull @NotEmpty String state) {
+        log.info("Getting recovered cases across  for country : "+country + " and state "+state);
+
         List<VirusStatDataHolder> virusData = coronavirusService.getRecoveredCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country, state);
         updateLastRecordFetchDate(virusDashBoard);
@@ -109,6 +121,8 @@ public class Covid19Controller {
 
     @RequestMapping("/death/{country}")
     public VirusDashBoard getDeathCountry(@PathVariable("country") @NotNull @NotEmpty String country) {
+        log.info("Getting death cases across  for country : "+country);
+
         List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();;
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country);
         updateLastRecordFetchDate(virusDashBoard);
@@ -117,7 +131,9 @@ public class Covid19Controller {
     @RequestMapping("/death/{country}/{state}")
     public VirusDashBoard getDeathCountryState(@PathVariable("country") @NotNull @NotEmpty String country,
                                                    @PathVariable("state") @NotNull @NotEmpty String state) {
-        List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();;
+        log.info("Getting death cases across  for country : "+country + " and state : "+state);
+
+        List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();
         VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country, state);
         updateLastRecordFetchDate(virusDashBoard);
         return virusDashBoard;
