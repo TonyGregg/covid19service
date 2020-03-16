@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Created by Antony Genil Gregory on 3/15/2020 7:53 PM
  * For project : covid19service
@@ -13,10 +17,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class LocationStat {
+public class VirusStatDataHolder {
     private String state;
     private String country;
-    private int latestTotalCases;
-    private int numberOfNewCasesToday;
-
+    private int totalCases;
+    private double latitude;
+    private double longitude;
+    private int newCaseCount;
+    private List<DateCount> dateCountList;
+    private LocalDateTime recordLastUpdated;
 }

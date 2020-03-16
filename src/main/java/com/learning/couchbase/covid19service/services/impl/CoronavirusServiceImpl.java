@@ -1,6 +1,7 @@
 package com.learning.couchbase.covid19service.services.impl;
 
-import com.learning.couchbase.covid19service.model.LocationStat;
+import com.learning.couchbase.covid19service.model.VirusStatDataHolder;
+import com.learning.couchbase.covid19service.model.DateCount;
 import com.learning.couchbase.covid19service.services.CoronavirusService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -16,6 +17,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,37 +30,91 @@ import java.util.List;
 @Service
 @Slf4j
 public class CoronavirusServiceImpl implements CoronavirusService {
-    private List<LocationStat> allStats = new ArrayList<>();
+
+
+    private List<VirusStatDataHolder> virusConfirmedList = new ArrayList<>();
+    private List<VirusStatDataHolder> virusRecoveredList = new ArrayList<>();
+    private List<VirusStatDataHolder> virusDeathList = new ArrayList<>();
+
     @Override
+    public List<VirusStatDataHolder> getConfirmedCases(){
+        return virusConfirmedList;
+    }
+
+    @Override
+    public List<VirusStatDataHolder> getRecoveredCases() {
+        return virusRecoveredList;
+    }
+
+    @Override
+    public List<VirusStatDataHolder> getDeathCases() {
+        return virusDeathList;
+    }
+
     @PostConstruct
-    @Scheduled(cron = "* * 1 * * *")
-//    @Scheduled(cron = "5 * * * * *")
-    public List<LocationStat> fetchVirusData() throws IOException, InterruptedException {
-        List<LocationStat> newStats = new ArrayList<>();
+    @Scheduled(cron = "0 */30 * * * *") // Runs at every 30th minute
+    private void fetchVirusData() throws IOException, InterruptedException {
+        log.info("Updating confirmed case records..");
+        List<VirusStatDataHolder> confirmedList = fetchVirusData(COVID19_CONFIRMED_CASES_URL);
+        this.virusConfirmedList = confirmedList;
+        log.info("Confirmed case records updated");
+
+        log.info("Updating recovered cases.. ");
+        List<VirusStatDataHolder> recoveredList = fetchVirusData(COVID19_RECOVERED_CASES_URL);
+        this.virusRecoveredList = recoveredList;
+        log.info("Updated Recovered Cases ");
+
+        log.info("Updating death cases.. ");
+        List<VirusStatDataHolder> deathList = fetchVirusData(COVID19_DEATH_CASES_URL);
+        this.virusDeathList = deathList;
+        log.info("Updated Recovered Cases ");
+
+
+    }
+
+    private List<VirusStatDataHolder> fetchVirusData(String URL) throws IOException, InterruptedException{
+        log.info("Fetching records from "+URL);
+        List<VirusStatDataHolder> virusStatDataHolderList = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(VIRUS_DATA_URL)).build();
+                .uri(URI.create(URL)).build();
         HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        log.info("Response from the GIT Covid 19 CSSE URL :: "+httpResponse.body());
 
         StringReader csvStringReader = new StringReader(httpResponse.body());
 
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvStringReader);
-        LocationStat locationStat;
+        VirusStatDataHolder virusStatDataHolder;
         for (CSVRecord record : records) {
-            locationStat = new LocationStat();
-            String state = record.get("Province/State");
-            locationStat.setState(state);
-            locationStat.setCountry(record.get("Country/Region"));
-            locationStat.setLatestTotalCases(Integer.parseInt(record.get(record.size() - 1)));
-            locationStat.setNumberOfNewCasesToday(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
-
-            log.info(locationStat.toString());
-            newStats.add(locationStat);
-//            String customerNo = record.get("CustomerNo");
-//            String name = record.get("Name");
+            virusStatDataHolder = new VirusStatDataHolder();
+            virusStatDataHolder.setState(record.get(0)); // Province/State
+            virusStatDataHolder.setCountry(record.get(1)); // Country/Region
+            virusStatDataHolder.setLatitude(Double.parseDouble(record.get(2))); // Latitude
+            virusStatDataHolder.setLongitude(Double.parseDouble(record.get(3))); // Longitude
+            virusStatDataHolder.setTotalCases(Integer.parseInt(record.get(record.size() - 1))); // Latest total cases
+            virusStatDataHolder.setNewCaseCount(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
+            virusStatDataHolder.setDateCountList(getDateCount(record));
+            virusStatDataHolder.setRecordLastUpdated(LocalDateTime.now());
+            virusStatDataHolderList.add(virusStatDataHolder);
         }
-        this.allStats = newStats;
-        return newStats;
+        return virusStatDataHolderList;
+
+    }
+
+    private List<DateCount> getDateCount(CSVRecord record) {
+        List<DateCount> dateCountList = new ArrayList<>();
+        // Start with record column # 4 (1st case data available Jan 22, 2020) to all the way to size - 1
+        DateCount dateCount = null;
+        int col = 4;
+        LocalDate localDate = LocalDate.of(2020, Month.JANUARY, 22);
+        while (col < record.size()) {
+            dateCount = new DateCount();
+            dateCount.setDate(localDate);
+            dateCount.setCount(Integer.parseInt(record.get(col)));
+            localDate = localDate.plusDays(1);
+            col++;
+            dateCountList.add(dateCount);
+        }
+
+        return dateCountList;
     }
 }

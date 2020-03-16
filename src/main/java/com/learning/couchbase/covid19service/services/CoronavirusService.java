@@ -1,6 +1,6 @@
 package com.learning.couchbase.covid19service.services;
 
-import com.learning.couchbase.covid19service.model.LocationStat;
+import com.learning.couchbase.covid19service.model.VirusStatDataHolder;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,6 +10,22 @@ import java.util.List;
  * For project : covid19service
  **/
 public interface CoronavirusService {
-    public static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
-    public List<LocationStat> fetchVirusData() throws IOException, InterruptedException;
+
+    // Confirmed cases CSV link
+    public static String COVID19_CONFIRMED_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" +
+            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
+
+    // Recovered cases CSV link
+    public static String COVID19_RECOVERED_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" +
+            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv";
+
+    // Death cases
+    public static String COVID19_DEATH_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master" +
+            "/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv";
+
+    public List<VirusStatDataHolder> getConfirmedCases();
+    public List<VirusStatDataHolder> getRecoveredCases();
+    public List<VirusStatDataHolder> getDeathCases();
+
+
 }
