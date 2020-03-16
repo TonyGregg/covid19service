@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * For project : covid19service
  **/
 @RestController
-@RequestMapping("/api/v1/covid19")
+@RequestMapping("/api/v1")
 @Slf4j
 public class Covid19Controller {
     @Autowired
@@ -90,7 +90,38 @@ public class Covid19Controller {
         return virusDashBoard;
     }
 
+    @RequestMapping("/recovered/{country}")
+    public VirusDashBoard getRecoveredCountry(@PathVariable("country") @NotNull @NotEmpty String country) {
+        List<VirusStatDataHolder> virusData = coronavirusService.getRecoveredCases();;
+        VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country);
+        updateLastRecordFetchDate(virusDashBoard);
+        return virusDashBoard;
+    }
+    @RequestMapping("/recovered/{country}/{state}")
+    public VirusDashBoard getRecoveredCountryState(@PathVariable("country") @NotNull @NotEmpty String country,
+                                                   @PathVariable("state") @NotNull @NotEmpty String state) {
+        List<VirusStatDataHolder> virusData = coronavirusService.getRecoveredCases();;
+        VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country, state);
+        updateLastRecordFetchDate(virusDashBoard);
+        return virusDashBoard;
+    }
 
+
+    @RequestMapping("/death/{country}")
+    public VirusDashBoard getDeathCountry(@PathVariable("country") @NotNull @NotEmpty String country) {
+        List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();;
+        VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country);
+        updateLastRecordFetchDate(virusDashBoard);
+        return virusDashBoard;
+    }
+    @RequestMapping("/death/{country}/{state}")
+    public VirusDashBoard getDeathCountryState(@PathVariable("country") @NotNull @NotEmpty String country,
+                                                   @PathVariable("state") @NotNull @NotEmpty String state) {
+        List<VirusStatDataHolder> virusData = coronavirusService.getDeathCases();;
+        VirusDashBoard virusDashBoard = getVirusDashBoard(virusData, country, state);
+        updateLastRecordFetchDate(virusDashBoard);
+        return virusDashBoard;
+    }
 
     /**
      * Filter by country
