@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,12 @@ public class Covid19FastController {
         log.info("Getting confirmed cases across the globe");
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getConfirmedCases();
+        List<VirusStatDataFastHolder> sortedList =
+        virusFastDashBoard.getVirusStatDataHolderList().stream().
+                sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
+
         updateTotalCounts(virusFastDashBoard);
 
         return virusFastDashBoard;
@@ -43,6 +50,12 @@ public class Covid19FastController {
         log.info("Getting recovered cases across the globe");
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getRecoveredCases();
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
+
         updateTotalCounts(virusFastDashBoard);
         return virusFastDashBoard;
     }
@@ -52,6 +65,12 @@ public class Covid19FastController {
         log.info("Getting recovered cases across the globe");
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getDeathCases();
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
+
         updateTotalCounts(virusFastDashBoard);
         return virusFastDashBoard;
     }
@@ -79,6 +98,12 @@ public class Covid19FastController {
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getConfirmedCases();
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
+
         updateTotalCounts(filteredBoard);
         filteredBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
@@ -91,6 +116,12 @@ public class Covid19FastController {
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getConfirmedCases();
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country, state);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
+
         updateTotalCounts(filteredBoard);
         filteredBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
@@ -103,6 +134,11 @@ public class Covid19FastController {
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getRecoveredCases();
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
         updateTotalCounts(filteredBoard);
         filteredBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
@@ -115,6 +151,11 @@ public class Covid19FastController {
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getRecoveredCases();
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country, state);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
         updateTotalCounts(filteredBoard);
         filteredBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
@@ -127,6 +168,11 @@ public class Covid19FastController {
         log.info("Getting death cases across  for country : "+country);
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getDeathCases();
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
         updateTotalCounts(filteredBoard);
         filteredBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
@@ -138,6 +184,11 @@ public class Covid19FastController {
         log.info("Getting death cases across  for country : "+country + " and state : "+state);
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getDeathCases();
         VirusFastDashBoard filteredVirusBoard =  filterVirusDashBoard(virusFastDashBoard, country, state);
+        List<VirusStatDataFastHolder> sortedList =
+                virusFastDashBoard.getVirusStatDataHolderList().stream().
+                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        collect(Collectors.toList());
+        virusFastDashBoard.setVirusStatDataHolderList(sortedList);
         updateTotalCounts(filteredVirusBoard);
         filteredVirusBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredVirusBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
