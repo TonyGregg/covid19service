@@ -67,7 +67,7 @@ public class CoronavirusServiceImpl implements CoronavirusService {
         log.info("Updating death cases.. ");
         List<VirusStatDataHolder> deathList = fetchVirusData(COVID19_DEATH_CASES_URL);
         this.virusDeathList = deathList;
-        log.info("Updated Recovered Cases ");
+        log.info("Updated death Cases ");
 
 
     }

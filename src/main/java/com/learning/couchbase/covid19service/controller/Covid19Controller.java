@@ -32,6 +32,7 @@ public class Covid19Controller {
         return virusDashBoard;
     }
 
+
     @RequestMapping("/recovered")
     public VirusDashBoard getAllRecovered() {
         log.info("Getting recovered cases across the globe");
