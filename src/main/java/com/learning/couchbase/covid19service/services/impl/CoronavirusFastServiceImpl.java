@@ -107,21 +107,28 @@ public class CoronavirusFastServiceImpl implements CoronavirusFastService {
 
 
         VirusStatDataFastHolder virusStatDataHolder;
-        for (CSVRecord record : records) {
-            virusStatDataHolder = new VirusStatDataFastHolder();
-            virusStatDataHolder.setState(record.get(0)); // Province/State
-            virusStatDataHolder.setCountry(record.get(1)); // Country/Region
+        CSVRecord currentRec = null;
+        try {
+            for (CSVRecord record : records) {
+                currentRec = record;
+                virusStatDataHolder = new VirusStatDataFastHolder();
+                virusStatDataHolder.setState(record.get(0)); // Province/State
+                virusStatDataHolder.setCountry(record.get(1)); // Country/Region
 //            log.info(record.toString());
 
-            virusStatDataHolder.setLatitude(Double.parseDouble(record.get(2))); // Latitude
-            virusStatDataHolder.setLongitude(Double.parseDouble(record.get(3))); // Longitude
-            virusStatDataHolder.setTotalCases(Integer.parseInt(record.get(record.size() - 1))); // Latest total cases
-            virusStatDataHolder.setNewCaseCount(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
+                virusStatDataHolder.setLatitude(Double.parseDouble(record.get(2))); // Latitude
+                virusStatDataHolder.setLongitude(Double.parseDouble(record.get(3))); // Longitude
+                virusStatDataHolder.setTotalCases(Integer.parseInt(record.get(record.size() - 1))); // Latest total cases
+                virusStatDataHolder.setNewCaseCount(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
 
 
 
-            virusStatDataHolderList.add(virusStatDataHolder);
+                virusStatDataHolderList.add(virusStatDataHolder);
+            }
+        } catch (NumberFormatException ex) {
+            log.error("Number format exception "+ex + " Record " + currentRec);
         }
+
         virusFastDashBoard.setVirusStatDataHolderList(virusStatDataHolderList);
         return virusFastDashBoard;
 

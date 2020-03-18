@@ -84,18 +84,26 @@ public class CoronavirusServiceImpl implements CoronavirusService {
 
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvStringReader);
         VirusStatDataHolder virusStatDataHolder;
-        for (CSVRecord record : records) {
-            virusStatDataHolder = new VirusStatDataHolder();
-            virusStatDataHolder.setState(record.get(0)); // Province/State
-            virusStatDataHolder.setCountry(record.get(1)); // Country/Region
-            virusStatDataHolder.setLatitude(Double.parseDouble(record.get(2))); // Latitude
-            virusStatDataHolder.setLongitude(Double.parseDouble(record.get(3))); // Longitude
-            virusStatDataHolder.setTotalCases(Integer.parseInt(record.get(record.size() - 1))); // Latest total cases
-            virusStatDataHolder.setNewCaseCount(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
-            virusStatDataHolder.setDateCountList(getDateCount(record));
-            virusStatDataHolder.setRecordLastUpdated(LocalDateTime.now());
-            virusStatDataHolderList.add(virusStatDataHolder);
+        CSVRecord currentRec = null;
+        try {
+
+            for (CSVRecord record : records) {
+                currentRec = record;
+                virusStatDataHolder = new VirusStatDataHolder();
+                virusStatDataHolder.setState(record.get(0)); // Province/State
+                virusStatDataHolder.setCountry(record.get(1)); // Country/Region
+                virusStatDataHolder.setLatitude(Double.parseDouble(record.get(2))); // Latitude
+                virusStatDataHolder.setLongitude(Double.parseDouble(record.get(3))); // Longitude
+                virusStatDataHolder.setTotalCases(Integer.parseInt(record.get(record.size() - 1))); // Latest total cases
+                virusStatDataHolder.setNewCaseCount(Integer.parseInt(record.get(record.size() - 1)) - Integer.parseInt(record.get(record.size() - 2)));
+                virusStatDataHolder.setDateCountList(getDateCount(record));
+                virusStatDataHolder.setRecordLastUpdated(LocalDateTime.now());
+                virusStatDataHolderList.add(virusStatDataHolder);
+            }
+        } catch (NumberFormatException ex) {
+            log.error("Number format exception "+ex + " Record " + currentRec);
         }
+
         return virusStatDataHolderList;
 
     }
