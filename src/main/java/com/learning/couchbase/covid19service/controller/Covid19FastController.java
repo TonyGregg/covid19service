@@ -207,6 +207,28 @@ public class Covid19FastController {
 
         return countries;
     }
+
+    @RequestMapping("/death/countries")
+    public List<String> getCountryNamesWithDeath() {
+        List<String> countries = coronavirusService.getDeathCases().getVirusStatDataHolderList()
+                .stream().map(virusStatDataFastHolder -> virusStatDataFastHolder.getCountry())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return countries;
+    }
+
+    @RequestMapping("/recovered/countries")
+    public List<String> getCountryNamesRecovered() {
+        List<String> countries = coronavirusService.getRecoveredCases().getVirusStatDataHolderList()
+                .stream().map(virusStatDataFastHolder -> virusStatDataFastHolder.getCountry())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return countries;
+    }
     @RequestMapping("/confirmed/{country}/states")
     public Set<String> getConfirmedStateNames(@PathVariable("country") @NotBlank String country) {
         Set<String> states = coronavirusService.getConfirmedCases().getVirusStatDataHolderList()
