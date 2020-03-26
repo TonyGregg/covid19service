@@ -14,15 +14,15 @@ public interface CoronavirusFastService {
 
     // Confirmed cases CSV link
     public static String COVID19_CONFIRMED_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" +
-            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
+            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 
     // Recovered cases CSV link
     public static String COVID19_RECOVERED_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" +
-            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv";
+            "master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
     // Death cases
     public static String COVID19_DEATH_CASES_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master" +
-            "/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv";
+            "/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
 
     public VirusFastDashBoard getConfirmedCases();
     public VirusFastDashBoard getRecoveredCases();

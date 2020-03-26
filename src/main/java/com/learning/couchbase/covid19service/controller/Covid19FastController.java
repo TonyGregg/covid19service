@@ -1,17 +1,16 @@
 package com.learning.couchbase.covid19service.controller;
 
-import com.learning.couchbase.covid19service.model.VirusDashBoard;
-import com.learning.couchbase.covid19service.model.VirusFastDashBoard;
-import com.learning.couchbase.covid19service.model.VirusStatDataFastHolder;
-import com.learning.couchbase.covid19service.model.VirusStatDataHolder;
+import com.learning.couchbase.covid19service.model.*;
 import com.learning.couchbase.covid19service.services.CoronavirusFastService;
 import com.learning.couchbase.covid19service.services.CoronavirusService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
@@ -28,6 +27,12 @@ import java.util.stream.Collectors;
 public class Covid19FastController {
     @Autowired
     CoronavirusFastService coronavirusService;
+
+    @RequestMapping("/confirmed_tracker/{country}")
+    public Tracker getTracker(@PathVariable("country") @NotBlank String country) {
+        return null;
+    }
+
     @RequestMapping("/confirmed")
     public VirusFastDashBoard getAllConfirmedCases() {
         log.info("Getting confirmed cases across the globe");
