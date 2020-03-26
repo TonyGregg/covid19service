@@ -13,8 +13,4 @@ public class Tracker {
     private List<Counter> cumulativeCounterList;
     private List<Counter> newCasesCounterList;
 }
-@Data
-class Counter {
-    private LocalDate localDate;
-    private int count;
-}
+

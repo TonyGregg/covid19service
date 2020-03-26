@@ -29,10 +29,7 @@ public class Covid19FastController {
     @Autowired
     CoronavirusFastService coronavirusService;
 
-    @RequestMapping("/confirmed_tracker/{country}")
-    public Tracker getTracker(@PathVariable("country") @NotBlank String country) {
-        return null;
-    }
+
 
     @RequestMapping("/confirmed")
     public VirusFastDashBoard getAllConfirmedCases() {
