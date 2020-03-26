@@ -15,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -39,9 +40,9 @@ public class Covid19FastController {
 
         VirusFastDashBoard virusFastDashBoard = coronavirusService.getConfirmedCases();
         List<VirusStatDataFastHolder> sortedList =
-        virusFastDashBoard.getVirusStatDataHolderList().stream().
-                sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
-                collect(Collectors.toList());
+        virusFastDashBoard.getVirusStatDataHolderList().stream()
+                .sorted(Comparator.comparing(VirusStatDataFastHolder::getTotalCases).reversed())
+                .collect(Collectors.toList());
         virusFastDashBoard.setVirusStatDataHolderList(sortedList);
 
         updateTotalCounts(virusFastDashBoard);
@@ -105,7 +106,7 @@ public class Covid19FastController {
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country);
         List<VirusStatDataFastHolder> sortedList =
                 virusFastDashBoard.getVirusStatDataHolderList().stream().
-                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        sorted(Comparator.comparing(VirusStatDataFastHolder::getTotalCases).reversed()).
                         collect(Collectors.toList());
         virusFastDashBoard.setVirusStatDataHolderList(sortedList);
 
@@ -123,7 +124,7 @@ public class Covid19FastController {
         VirusFastDashBoard filteredBoard = filterVirusDashBoard(virusFastDashBoard, country, state);
         List<VirusStatDataFastHolder> sortedList =
                 virusFastDashBoard.getVirusStatDataHolderList().stream().
-                        sorted(Comparator.comparingInt(VirusStatDataFastHolder::getTotalCases).reversed()).
+                        sorted(Comparator.comparing(VirusStatDataFastHolder::getTotalCases).reversed()).
                         collect(Collectors.toList());
         virusFastDashBoard.setVirusStatDataHolderList(sortedList);
 
@@ -198,6 +199,46 @@ public class Covid19FastController {
         filteredVirusBoard.setRecordLastUpdated(virusFastDashBoard.getRecordLastUpdated());
         filteredVirusBoard.setLatestReportDate(virusFastDashBoard.getLatestReportDate());
         return filteredVirusBoard;
+    }
+
+    @RequestMapping("/confirmed/countries")
+    public List<String> getConfirmedCountryNames() {
+        List<String> countries = coronavirusService.getConfirmedCases().getVirusStatDataHolderList()
+                .stream().map(virusStatDataFastHolder -> virusStatDataFastHolder.getCountry())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return countries;
+    }
+
+    @RequestMapping("/death/countries")
+    public List<String> getCountryNamesWithDeath() {
+        List<String> countries = coronavirusService.getDeathCases().getVirusStatDataHolderList()
+                .stream().map(virusStatDataFastHolder -> virusStatDataFastHolder.getCountry())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return countries;
+    }
+
+    @RequestMapping("/recovered/countries")
+    public List<String> getCountryNamesRecovered() {
+        List<String> countries = coronavirusService.getRecoveredCases().getVirusStatDataHolderList()
+                .stream().map(virusStatDataFastHolder -> virusStatDataFastHolder.getCountry())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return countries;
+    }
+    @RequestMapping("/confirmed/{country}/states")
+    public Set<String> getConfirmedStateNames(@PathVariable("country") @NotBlank String country) {
+        Set<String> states = coronavirusService.getConfirmedCases().getVirusStatDataHolderList()
+                .stream().filter(viruStateHolder -> country.equalsIgnoreCase(viruStateHolder.getCountry()))
+                .map(VirusStatDataFastHolder::getState).collect(Collectors.toSet());
+        return states;
     }
 
     /**
