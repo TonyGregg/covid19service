@@ -101,9 +101,9 @@ public class CoronavirusFastServiceImpl implements CoronavirusFastService {
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yy");
-        if (COVID19_RECOVERED_CASES_URL.equals(URL)) {
-            formatter = DateTimeFormatter.ofPattern("M/dd/yyyy");
-        }
+//        if (COVID19_RECOVERED_CASES_URL.equals(URL)) {
+//            formatter = DateTimeFormatter.ofPattern("M/dd/yyyy");
+//        }
         String lastDataAvailable = headerNames.get(headerNames.size() - 1); // last column is the latest date
         virusFastDashBoard.setLatestReportDate(LocalDate.parse(lastDataAvailable,formatter));
         virusFastDashBoard.setRecordLastUpdated(LocalDateTime.now());

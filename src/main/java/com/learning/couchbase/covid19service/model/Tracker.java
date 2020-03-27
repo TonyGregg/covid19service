@@ -10,7 +10,8 @@ import java.util.List;
  **/
 @Data
 public class Tracker {
-    private List<Counter> cumulativeCounterList;
-    private List<Counter> newCasesCounterList;
+    private List<Label> labels;
+    private List<Value> cumulativeValues;
+    private List<Value> newValues;
 }
 

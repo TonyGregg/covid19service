@@ -1,5 +1,6 @@
 package com.learning.couchbase.covid19service.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * For project : covid19service
  **/
 @Data
-public class Category {
+@AllArgsConstructor
+public class Label {
     private String label;
 }

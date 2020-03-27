@@ -1,8 +1,6 @@
 package com.learning.couchbase.covid19service.services.impl;
 
-import com.learning.couchbase.covid19service.model.Counter;
-import com.learning.couchbase.covid19service.model.Tracker;
-import com.learning.couchbase.covid19service.model.VirusStatDataHolder;
+import com.learning.couchbase.covid19service.model.*;
 import com.learning.couchbase.covid19service.services.DailyTrackerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -56,32 +54,30 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
         }
 
         Tracker tracker = new Tracker();
-        ArrayList<Counter> cumulativeCases = new ArrayList<>();
-        ArrayList<Counter> newCases = new ArrayList<>();
-        Counter cumulativeCounter = null;
-        Counter newCounter = null;
+        ArrayList<Label> labels = new ArrayList<>();
+        ArrayList<Value> cumulativeCases = new ArrayList<>();
+        ArrayList<Value> newCases = new ArrayList<>();
+        Value cumulativeValue = null;
+        Value newValue = null;
+        Label label = null;
         CSVRecord currentRec = null;
         try {
 
             for (CSVRecord record : records) {
                 currentRec =  record;
-                cumulativeCounter = new Counter();
-                newCounter = new Counter();
-
-                cumulativeCounter.setLocalDate(record.get(0)); // Date
-                cumulativeCounter. setCount(Integer.parseInt(record.get(1))); // cumulative count
-
-                newCounter.setLocalDate(record.get(0)); // Date
-                newCounter. setCount(Integer.parseInt(record.get(2))); // new count
-
-                cumulativeCases.add(cumulativeCounter);
-                newCases.add(newCounter);
+                label = new Label(record.get(0)); // Date
+                labels.add(label);
+                cumulativeValue = new Value(Integer.parseInt(record.get(1))); // cumulative count
+                newValue = new Value(Integer.parseInt(record.get(2))); // New count
+                cumulativeCases.add(cumulativeValue);
+                newCases.add(newValue);
             }
         } catch (NumberFormatException ex) {
             log.error("Number format exception "+ex + " Record " + currentRec);
         }
-        tracker.setCumulativeCounterList(cumulativeCases);
-        tracker.setNewCasesCounterList(newCases);
+        tracker.setCumulativeValues(cumulativeCases);
+        tracker.setNewValues(newCases);
+        tracker.setLabels(labels);
 
         return tracker;
     }
