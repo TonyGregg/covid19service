@@ -36,9 +36,10 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
             case "IN":
             case "in":
             case "India":
-                URL = DailyTrackerService.CONSOLIDATED_TRACKER_US;
+                URL = DailyTrackerService.CONSOLIDATED_TRACKER_INDIA;
                 break;
         }
+        log.info("URL used.."+URL);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(URL)).build();
