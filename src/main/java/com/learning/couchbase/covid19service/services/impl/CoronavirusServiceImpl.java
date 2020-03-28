@@ -52,7 +52,7 @@ public class CoronavirusServiceImpl implements CoronavirusService {
     }
 
     @PostConstruct
-    @Scheduled(cron = "0 */30 * * * *") // Runs at every 30th minute
+//    @Scheduled(cron = "0 */30 * * * *") // Runs at every 30th minute
     private void fetchVirusData() throws IOException, InterruptedException {
         log.info("Updating confirmed case records..");
         List<VirusStatDataHolder> confirmedList = fetchVirusData(COVID19_CONFIRMED_CASES_URL);
