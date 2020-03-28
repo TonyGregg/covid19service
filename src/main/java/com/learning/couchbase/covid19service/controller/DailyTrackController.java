@@ -26,12 +26,7 @@ public class DailyTrackController {
     HttpServletRequest request;
     @RequestMapping("/confirmed/{country}")
     public Tracker getTracker(@PathVariable("country") @NotBlank String country) {
-        log.info("Daily tracker for country : "+country);
-        String ipAddress = request.getRemoteAddr();
-        String remoteAddr = request.getHeader("X-FORWARDED-FOR");
-
-        log.info("IP Address of the client : "+ " remote address :: "+ remoteAddr);
+        log.info("Daily tracker requested for country : "+country);
         return dailyTrackerService.getTracker(country);
     }
-
 }

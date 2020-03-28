@@ -56,7 +56,7 @@ public class CoronavirusFastServiceImpl implements CoronavirusFastService {
         return this.virusDeathDashBoard;
     }
 
-    @PostConstruct
+//    @PostConstruct
 //    @Scheduled(cron = "0 */32 * * * *") // Runs at every 30th minute
     private void fetchVirusData() throws IOException, InterruptedException {
         log.info("Updating confirmed case records..");

@@ -5,9 +5,11 @@ import com.learning.couchbase.covid19service.services.DailyTrackerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -24,21 +26,19 @@ import java.util.ArrayList;
 @Service
 @Slf4j
 public class DailyTrackerServiceImpl implements DailyTrackerService {
+    Tracker usTracker;
+    Tracker indiaTracker;
 
-    @Override
-    public Tracker getTracker(String country) {
-        String URL = DailyTrackerService.CONSOLIDATED_TRACKER_US;;
-        switch (country) {
-            case "US":
-            case "us":
-                URL = DailyTrackerService.CONSOLIDATED_TRACKER_US;
-                break;
-            case "IN":
-            case "in":
-            case "India":
-                URL = DailyTrackerService.CONSOLIDATED_TRACKER_INDIA;
-                break;
-        }
+    @PostConstruct
+    @Scheduled(cron = "0 */10 * * * *") // Runs at every 10th minute
+    public void initializeData() {
+        log.info("Loading data... "+LocalDateTime.now());
+        usTracker = initializeData(DailyTrackerService.CONSOLIDATED_TRACKER_US);
+        indiaTracker = initializeData(DailyTrackerService.CONSOLIDATED_TRACKER_INDIA);
+        log.info("Finished loading data... "+LocalDateTime.now());
+    }
+
+    private Tracker initializeData(String URL) {
         log.info("URL used.."+URL);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -81,5 +81,23 @@ public class DailyTrackerServiceImpl implements DailyTrackerService {
         tracker.setLabels(labels);
 
         return tracker;
+    }
+
+    @Override
+    public Tracker getTracker(String country) {
+        Tracker tracker = null;
+        switch (country) {
+            case "US":
+            case "us":
+                tracker = this.usTracker;
+                break;
+            case "IN":
+            case "in":
+            case "India":
+                tracker = this.indiaTracker;
+                break;
+        }
+        return tracker;
+
     }
 }
