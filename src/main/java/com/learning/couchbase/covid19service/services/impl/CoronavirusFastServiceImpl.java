@@ -72,7 +72,7 @@ public class CoronavirusFastServiceImpl implements CoronavirusFastService {
         log.info("Updating death cases.. ");
         VirusFastDashBoard  deathDb = fetchVirusData(COVID19_DEATH_CASES_URL);
         this.virusDeathDashBoard = deathDb;
-        log.info("Updated death Cases ");
+        log.info("Updated death Cases :: ");
 
 
     }
