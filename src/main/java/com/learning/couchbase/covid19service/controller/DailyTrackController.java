@@ -30,7 +30,7 @@ public class DailyTrackController {
         String ipAddress = request.getRemoteAddr();
         String remoteAddr = request.getHeader("X-FORWARDED-FOR");
 
-        log.info("IP Address of the client : "+ " remote address : "+ remoteAddr);
+        log.info("IP Address of the client : "+ " remote address :: "+ remoteAddr);
         return dailyTrackerService.getTracker(country);
     }
 
