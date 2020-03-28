@@ -7,9 +7,9 @@ import com.learning.couchbase.covid19service.model.Tracker;
  * For project : covid19service
  **/
 public interface DailyTrackerService {
-    public static String CONSOLIDATED_TRACKER_US = "https://raw.githubusercontent.com/TonyGregg/covid19service" +
-            "/master/src/main/resources/US.csv";
-    public static String CONSOLIDATED_TRACKER_INDIA = "https://raw.githubusercontent.com/TonyGregg/covid19service" +
-            "/master/src/main/resources/India.csv";
+    public static String CONSOLIDATED_TRACKER_US = "https://raw.githubusercontent.com/TonyGregg/covid19data/master/data/" +
+            "US.csv";
+    public static String CONSOLIDATED_TRACKER_INDIA = "https://raw.githubusercontent.com/TonyGregg/covid19data/master/" +
+            "data/India.csv";
     public Tracker getTracker(String country);
 }
